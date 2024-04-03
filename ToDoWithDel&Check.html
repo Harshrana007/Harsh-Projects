@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <input type="text" id="task" placeholder="enter valid task">
+    <ul id="list">
+    </ul>
+    <button onclick="submit()">taskadd</button>
+    <script>
+        let task = [];
+        if (localStorage.getItem("task") != null) {
+            task = JSON.parse(localStorage.getItem("task"))
+        }else{
+            localStorage.setItem("task",JSON.stringify(task));
+        }
+        function showData(){
+            task.forEach((element)=>{
+        display(element);
+            })
+        }
+        showData();
+        
+        function display(obj){
+            let div=document.createElement("div");
+           let li=document.createElement("li");
+           li.innerHTML=obj;
+           let button=document.createElement("button");
+           button.innerHTML="delete";
+           let input =document.createElement("input");
+           input.setAttribute("type","checkbox");
+           div.setAttribute("id",Date.now());
+           button.addEventListener("click",del)
+           input.addEventListener("click",check)
+           div.appendChild(li);
+           div.appendChild(button);
+           div.appendChild(input);
+           document.getElementById("list").appendChild(div);
+        }
+        function check(){
+            if(event.target.checked){
+        event.target.parentElement.children[0].style.textDecoration="line-through";
+        }
+        else{
+            event.target.parentElement.children[0].style.textDecoration="none";
+        }
+        }
+function del(){
+            let div=event.target.parentElement;
+            let i;
+            var data=div.id;
+            document.getElementById("list").removeChild(div);
+              var arr=JSON.parse(localStorage.getItem("task"));
+            arr.forEach(function(element,index){
+              if(element==data){
+                i=element.id;
+              }
+              arr.splice(i,1);
+            })
+            localStorage.setItem("task",JSON.stringify(arr));
+        }
+        function submit() {
+            var input = document.getElementById("task");
+            var text = input.value;
+            if (text.trim() == "") {
+                alert("please provide task")
+            }
+            else{
+                display(text); 
+            let data=JSON.parse(localStorage.getItem("task"));  
+            data.push(text);
+            localStorage.setItem("task",JSON.stringify(data));       
+    }
+    input.value="";
+}
+    </script>
+</body>
+</html>
